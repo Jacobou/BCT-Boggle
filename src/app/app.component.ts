@@ -67,7 +67,13 @@ export class AppComponent implements OnInit{
       this.words.push(this.currentWord);
       this.score = wordListScore(this.words);
     }
+    this.resetBoard();
+  }
+
+  // Reset the board
+  resetBoard(): void {
     this.currentWord = '';
     this.letterClicked = false;
+    this.usedDices = [];
   }
 }
