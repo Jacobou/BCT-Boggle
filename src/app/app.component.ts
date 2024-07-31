@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {wordListScore} from "./utils/boggle.util";
+import {WordListService} from "./services/word-list.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 export interface LetterCoordinates {
   x: number;
   y: number;
@@ -17,8 +19,14 @@ export class AppComponent implements OnInit{
   letterClicked: boolean = false;
   lastLetterIndexes: LetterCoordinates = {} as LetterCoordinates;
   usedDices: LetterCoordinates[] = [];
+  wordListLoaded: boolean = false;
+  errorMessage: string = '';
 
-  constructor() {}
+  constructor(private wordListService: WordListService, private modalService: NgbModal) {
+    this.wordListService.loadWordList().subscribe(() => {
+      this.wordListLoaded = true;
+    });
+  }
 
   ngOnInit(): void {
     this.generateBoard();
@@ -62,10 +70,18 @@ export class AppComponent implements OnInit{
   }
 
   // Submit the current word and calculate the score
-  submitWord(): void {
+  submitWord(content: any): void {
     if (this.currentWord.length >= 3) {
-      this.words.push(this.currentWord);
-      this.score = wordListScore(this.words);
+      if (this.wordListService.isValidWord(this.currentWord)) {
+        this.words.push(this.currentWord);
+        this.score = wordListScore(this.words);
+      } else {
+        this.errorMessage = 'Invalid word. Please try again.';
+        this.modalService.open(content);
+      }
+    } else {
+      this.errorMessage = 'Word must be at least 3 letters long.';
+      this.modalService.open(content);
     }
     this.resetBoard();
   }

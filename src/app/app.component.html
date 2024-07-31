@@ -11,7 +11,7 @@
   </div>
   <div class="input-group mt-3">
     <input type="text" class="form-control" placeholder="Enter word" [(ngModel)]="currentWord">
-    <button class="btn btn-primary" (click)="submitWord()">Submit</button>
+    <button class="btn btn-primary" (click)="submitWord(content)">Submit</button>
   </div>
   <div class="mt-3">
     <h3>Words</h3>
@@ -23,3 +23,19 @@
     <h3>Score: {{ score }}</h3>
   </div>
 </div>
+
+<!-- Modal Template -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Invalid Word</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    {{ errorMessage }}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
