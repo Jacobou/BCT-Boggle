@@ -5,10 +5,12 @@ import {FormsModule} from "@angular/forms";
 import {WordListService} from "./services/word-list.service";
 import {HttpClientModule} from "@angular/common/http";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { TimeUpModalComponent } from './components/time-up-modal/time-up-modal.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TimeUpModalComponent
   ],
     imports: [
         BrowserModule,

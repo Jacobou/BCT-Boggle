@@ -1,5 +1,9 @@
 <div class="container">
   <h1>Boggle Game</h1>
+  <!-- Display the timer -->
+  <div class="timer mb-3">
+    <h2>Time Left: {{ timer | number:'2.0' }} seconds</h2>
+  </div>
   <div class="buttons">
     <button class="btn btn-primary mb-3" (click)="generateBoard(4)">Generate 4x4 Board</button>
     <button class="btn btn-secondary mb-3" (click)="generateBoard(6)">Generate 6x6 Board</button>
@@ -14,7 +18,7 @@
     </div>
   </div>
   <div class="form-group mt-3">
-    <input type="text" class="form-control" placeholder="Enter word" [(ngModel)]="currentWord">
+    <input type="text" class="form-control" [disabled]="true" placeholder="Click any letter to start entering a word" [(ngModel)]="currentWord">
     <button class="btn btn-primary mt-3" (click)="submitWord(content)">Submit</button>
   </div>
   <div class="mt-3">

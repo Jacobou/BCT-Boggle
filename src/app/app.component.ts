@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { wordListScore } from './utils/boggle.util';
 import { WordListService } from './services/word-list.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {interval, Subscription} from "rxjs";
+import {TimeUpModalComponent} from "./components/time-up-modal/time-up-modal.component";
 
 export interface LetterCoordinates {
   x: number;
@@ -24,6 +26,11 @@ export class AppComponent implements OnInit {
   wordListLoaded: boolean = false;
   errorMessage: string = '';
   boardSize: number = 0;
+  // Timer variables
+  timer: number = 180; // 3 minutes in seconds
+  gameActive: boolean = true; // To track if the game is active
+  timerSubscription: Subscription = new Subscription();
+  defaultTimer: number = 180;
 
   constructor(private wordListService: WordListService, private modalService: NgbModal) {
     this.wordListService.loadWordList().subscribe(() => {
@@ -33,6 +40,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateBoard();
+    this.startTimer();
   }
 
   // Generate a 4x4 board of random letters by default or a board of size x size
@@ -40,7 +48,6 @@ export class AppComponent implements OnInit {
     this.boardSize = size;
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     this.board = [];
-    console.log(size)
     for (let i = 0; i < size; i++) {
       const row = [];
       for (let j = 0; j < size; j++) {
@@ -48,6 +55,37 @@ export class AppComponent implements OnInit {
       }
       this.board.push(row);
     }
+    this.startTimer();
+    this.timerSubscription.unsubscribe();
+  }
+
+  // Start the timer
+  startTimer(): void {
+    this.timer = this.defaultTimer;
+    this.timerSubscription = interval(1000).subscribe(() => {
+      if (this.timer > 0) {
+        this.timer--;
+      } else {
+        this.timerSubscription.unsubscribe();
+        this.gameActive = false;
+        this.showTimeUpModal();
+      }
+    });
+  }
+
+  // Show time-up modal
+  showTimeUpModal(): void {
+    const modalRef = this.modalService.open(TimeUpModalComponent, {
+      backdrop: 'static', // Prevent clicking outside the modal
+      keyboard: false // Prevent closing with the escape key
+    });
+    modalRef.componentInstance.message = 'Time is up! Your game has ended.';
+    modalRef.result.then(
+      (result) => {
+        this.generateBoard(this.boardSize);
+        this.startTimer();
+      }
+    );
   }
 
   // Select a cell on the board
