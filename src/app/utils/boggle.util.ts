@@ -1,3 +1,4 @@
+// Calculate the score in a single player Boggle game
 export function wordListScore(wordList: string[]): number {
   return wordList.reduce((score, word) => {
     const length = word.length;
@@ -16,6 +17,7 @@ export function wordListScore(wordList: string[]): number {
   }, 0);
 }
 
+// Calculate the score for each player in a multiplayer Boggle game
 export function calculateMultiplayerBoggleScores(playersWords: Map<string, string[]>): Map<string, number> {
   // Flatten all words from all players into a single array
   const allWords: string[] = [];
