@@ -1,7 +1,14 @@
 .board {
   display: grid;
+  gap: 16px;
+}
+
+.board-4 {
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+}
+
+.board-6 {
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .board .row {

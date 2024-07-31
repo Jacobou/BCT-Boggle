@@ -1,17 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {wordListScore} from "./utils/boggle.util";
-import {WordListService} from "./services/word-list.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnInit } from '@angular/core';
+import { wordListScore } from './utils/boggle.util';
+import { WordListService } from './services/word-list.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 export interface LetterCoordinates {
   x: number;
   y: number;
 }
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   board: string[][] = [];
   currentWord: string = '';
   words: string[] = [];
@@ -21,6 +23,7 @@ export class AppComponent implements OnInit{
   usedDices: LetterCoordinates[] = [];
   wordListLoaded: boolean = false;
   errorMessage: string = '';
+  boardSize: number = 0;
 
   constructor(private wordListService: WordListService, private modalService: NgbModal) {
     this.wordListService.loadWordList().subscribe(() => {
@@ -32,13 +35,15 @@ export class AppComponent implements OnInit{
     this.generateBoard();
   }
 
-  // Generate a 4x4 board of random letters
-  generateBoard(): void {
+  // Generate a 4x4 board of random letters by default or a board of size x size
+  generateBoard(size: number = 4): void {
+    this.boardSize = size;
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     this.board = [];
-    for (let i = 0; i < 4; i++) {
+    console.log(size)
+    for (let i = 0; i < size; i++) {
       const row = [];
-      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < size; j++) {
         row.push(letters[Math.floor(Math.random() * letters.length)]);
       }
       this.board.push(row);
