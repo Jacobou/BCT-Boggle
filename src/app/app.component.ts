@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
     }
     this.startTimer();
     this.timerSubscription.unsubscribe();
+    this.resetBoard();
   }
 
   // Start the timer
